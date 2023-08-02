@@ -90,7 +90,7 @@ objects:
         spec:
           domain:
             cpu:
-              cores: ${VM_CPU}
+              cores: ${{VM_CPU}}
               sockets: 1
               threads: 1
             devices:

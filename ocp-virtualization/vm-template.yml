@@ -189,4 +189,4 @@ parameters:
     value: 2
   - name: "VM_RAM"
     description: Memory Count for VM
-    value: 4Gi
+    value: "4Gi"

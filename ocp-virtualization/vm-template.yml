@@ -186,7 +186,7 @@ parameters:
     value: http://192.168.230.1/cloud_images/rhel9-base.qcow2
   - name: "VM_CPU"
     description: CPU Count for VM
-    value: 2
+    value: "2"
   - name: "VM_RAM"
     description: Memory Count for VM
     value: "4Gi"

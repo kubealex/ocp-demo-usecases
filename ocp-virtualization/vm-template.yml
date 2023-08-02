@@ -1,79 +1,79 @@
-kind: 'Template'
-apiVersion: 'template.openshift.io/v1'
+kind: "Template"
+apiVersion: "template.openshift.io/v1"
 metadata:
-  name: 'rhel9-server'
-  namespace: 'demo-vm'
+  name: "rhel9-server"
+  namespace: "demo-vm"
   labels:
-    app.kubernetes.io/part-of: 'hyperconverged-cluster'
-    template.kubevirt.io/version: 'v0.25.0'
-    app.kubernetes.io/version: '4.13.2'
-    template.kubevirt.io/type: 'vm'
-    vm.kubevirt.io/template: 'rhel9-server-medium'
-    app.kubernetes.io/component: 'templating'
-    app.kubernetes.io/ocp-by: 'ssp-operator'
-    flavor.template.kubevirt.io/medium: 'true'
-    os.template.kubevirt.io/rhel9.0: 'true'
-    os.template.kubevirt.io/rhel9.1: 'true'
-    app.kubernetes.io/name: 'custom-templates'
-    os.template.kubevirt.io/rhel9.2: 'true'
-    vm.kubevirt.io/template.namespace: 'openshift'
-    workload.template.kubevirt.io/server: 'true'
+    app.kubernetes.io/part-of: "hyperconverged-cluster"
+    template.kubevirt.io/version: "v0.25.0"
+    app.kubernetes.io/version: "4.13.2"
+    template.kubevirt.io/type: "vm"
+    vm.kubevirt.io/template: "rhel9-server-medium"
+    app.kubernetes.io/component: "templating"
+    app.kubernetes.io/ocp-by: "ssp-operator"
+    flavor.template.kubevirt.io/medium: "true"
+    os.template.kubevirt.io/rhel9.0: "true"
+    os.template.kubevirt.io/rhel9.1: "true"
+    app.kubernetes.io/name: "custom-templates"
+    os.template.kubevirt.io/rhel9.2: "true"
+    vm.kubevirt.io/template.namespace: "openshift"
+    workload.template.kubevirt.io/server: "true"
   annotations:
-    template.kubevirt.io/provider: ''
-    template.kubevirt.io/provider-url: 'https://www.redhat.com'
+    template.kubevirt.io/provider: ""
+    template.kubevirt.io/provider-url: "https://www.redhat.com"
     template.kubevirt.io/containerdisks: "registry.redhat.io/rhel9/rhel-guest-image\n"
-    template.kubevirt.io/version: 'v1alpha1'
-    openshift.io/display-name: 'Red Hat Enterprise Linux 9 VM'
-    openshift.io/documentation-url: 'https://github.com/kubevirt/common-templates'
-    operator-sdk/primary-resource-type: 'SSP.ssp.kubevirt.io'
-    defaults.template.kubevirt.io/disk: 'rootdisk'
-    name.os.template.kubevirt.io/rhel9.0: 'Red Hat Enterprise Linux 9.0 or higher'
-    name.os.template.kubevirt.io/rhel9.1: 'Red Hat Enterprise Linux 9.0 or higher'
+    template.kubevirt.io/version: "v1alpha1"
+    openshift.io/display-name: "Red Hat Enterprise Linux 9 VM"
+    openshift.io/documentation-url: "https://github.com/kubevirt/common-templates"
+    operator-sdk/primary-resource-type: "SSP.ssp.kubevirt.io"
+    defaults.template.kubevirt.io/disk: "rootdisk"
+    name.os.template.kubevirt.io/rhel9.0: "Red Hat Enterprise Linux 9.0 or higher"
+    name.os.template.kubevirt.io/rhel9.1: "Red Hat Enterprise Linux 9.0 or higher"
     template.kubevirt.io/editable: "/objects[0].spec.template.spec.domain.cpu.sockets\n/objects[0].spec.template.spec.domain.cpu.cores\n/objects[0].spec.template.spec.domain.cpu.threads\n/objects[0].spec.template.spec.domain.resources.requests.memory\n/objects[0].spec.template.spec.domain.devices.disks\n/objects[0].spec.template.spec.volumes\n/objects[0].spec.template.spec.networks\n"
-    name.os.template.kubevirt.io/rhel9.2: 'Red Hat Enterprise Linux 9.0 or higher'
-    template.openshift.io/bindable: 'false'
-    operator-sdk/primary-resource: 'openshift-cnv/ssp-kubevirt-hyperconverged'
-    tags: 'hidden,kubevirt,virtualmachine,linux,rhel'
-    template.kubevirt.io/provider-support-level: 'Full'
-    description: 'Template for Red Hat Enterprise Linux 9 VM or newer. A PVC with the RHEL disk image must be available.'
-    openshift.io/support-url: 'https://github.com/kubevirt/common-templates/issues'
-    iconClass: 'icon-rhel'
-    openshift.io/provider-display-name: ''
+    name.os.template.kubevirt.io/rhel9.2: "Red Hat Enterprise Linux 9.0 or higher"
+    template.openshift.io/bindable: "false"
+    operator-sdk/primary-resource: "openshift-cnv/ssp-kubevirt-hyperconverged"
+    tags: "hidden,kubevirt,virtualmachine,linux,rhel"
+    template.kubevirt.io/provider-support-level: "Full"
+    description: "Template for Red Hat Enterprise Linux 9 VM or newer. A PVC with the RHEL disk image must be available."
+    openshift.io/support-url: "https://github.com/kubevirt/common-templates/issues"
+    iconClass: "icon-rhel"
+    openshift.io/provider-display-name: ""
 objects:
-  - apiVersion: 'kubevirt.io/v1'
-    kind: 'VirtualMachine'
+  - apiVersion: "kubevirt.io/v1"
+    kind: "VirtualMachine"
     metadata:
       annotations:
         vm.kubevirt.io/validations: "[\n  {\n    \"name\": \"minimal-required-memory\",\n    \"path\": \"jsonpath::.spec.domain.resources.requests.memory\",\n    \"rule\": \"integer\",\n    \"message\": \"This VM requires more memory.\",\n    \"min\": 1610612736\n  }\n]\n"
       labels:
-        app: '${NAME}'
-        vm.kubevirt.io/template: 'rhel9-server'
-        vm.kubevirt.io/template.revision: '1'
-        vm.kubevirt.io/template.namespace: 'openshift'
-      name: '${NAME}'
-      namespace: 'openshift'
+        app: "${NAME}"
+        vm.kubevirt.io/template: "rhel9-server"
+        vm.kubevirt.io/template.revision: "1"
+        vm.kubevirt.io/template.namespace: "openshift"
+      name: "${NAME}"
+      namespace: "openshift"
     spec:
       dataVolumeTemplates:
         - metadata:
-            name: '${NAME}'
+            name: "${NAME}"
           spec:
             storage:
               resources:
                 requests:
-                  storage: '30Gi'
-              storageClassName: 'ocs-storagecluster-cephfs'
+                  storage: "30Gi"
+              storageClassName: "ocs-storagecluster-cephfs"
             preallocation: false
             source:
               http:
-                url: '${SOURCE_URL}'
+                url: "${SOURCE_URL}"
         - metadata:
-            name: '${NAME}-additional-disk'
+            name: "${NAME}-additional-disk"
           spec:
             storage:
               resources:
                 requests:
-                  storage: '5Gi'
-              storageClassName: 'ocs-storagecluster-cephfs'
+                  storage: "5Gi"
+              storageClassName: "ocs-storagecluster-cephfs"
             preallocation: false
             source:
               blank: {}
@@ -81,37 +81,37 @@ objects:
       template:
         metadata:
           annotations:
-            vm.kubevirt.io/flavor: 'medium'
-            vm.kubevirt.io/os: 'rhel9'
-            vm.kubevirt.io/workload: 'server'
+            vm.kubevirt.io/flavor: "medium"
+            vm.kubevirt.io/os: "rhel9"
+            vm.kubevirt.io/workload: "server"
           labels:
-            kubevirt.io/domain: '${NAME}'
-            kubevirt.io/size: 'medium'
+            kubevirt.io/domain: "${NAME}"
+            kubevirt.io/size: "medium"
         spec:
           domain:
             cpu:
-              cores: 2
+              cores: ${VM_CPU}
               sockets: 1
               threads: 1
             devices:
               disks:
-                - name: 'rootdisk'
+                - name: "rootdisk"
                   disk:
-                    bus: 'virtio'
+                    bus: "virtio"
                   bootOrder: 1
                 - disk:
-                    bus: 'virtio'
-                  name: 'cloudinitdisk'
+                    bus: "virtio"
+                  name: "cloudinitdisk"
                   bootOrder: 2
-                - name: 'additional-disk'
+                - name: "additional-disk"
                   disk:
-                    bus: 'virtio'
+                    bus: "virtio"
               interfaces:
                 - masquerade: {}
-                  model: 'virtio'
-                  name: 'default'
-                - name: 'bridged-network'
-                  model: 'virtio'
+                  model: "virtio"
+                  name: "default"
+                - name: "bridged-network"
+                  model: "virtio"
                   bridge: {}
               networkInterfaceMultiqueue: true
               rng: {}
@@ -122,26 +122,26 @@ objects:
               bootloader:
                 efi: {}
             machine:
-              type: 'pc-q35-rhel9.2.0'
+              type: "pc-q35-rhel9.2.0"
             resources:
               requests:
-                memory: '4Gi'
-          evictionStrategy: 'LiveMigrate'
+                memory: ${VM_RAM}
+          evictionStrategy: "LiveMigrate"
           networks:
-            - name: 'default'
+            - name: "default"
               pod: {}
-            - name: 'bridged-network'
+            - name: "bridged-network"
               multus:
-                networkName: 'demo-vm/br1'
+                networkName: "demo-vm/br1"
           terminationGracePeriodSeconds: 180
           volumes:
             - dataVolume:
-                name: '${NAME}'
-              name: 'rootdisk'
-            - name: 'additional-disk'
+                name: "${NAME}"
+              name: "rootdisk"
+            - name: "additional-disk"
               dataVolume:
-                name: '${NAME}-additional-disk'
-            - name: 'cloudinitdisk'
+                name: "${NAME}-additional-disk"
+            - name: "cloudinitdisk"
               cloudInitNoCloud:
                 userData: |
                   #cloud-config
@@ -174,12 +174,19 @@ objects:
                   runcmd:
                     - /bin/bash /tmp/send_webhook.sh
 parameters:
-  - name: 'NAME'
-    description: 'VM name'
-    generate: 'expression'
-    from: 'rhel9-[a-z0-9]{16}'
-  - name: 'WEBHOOK_URL'
-    description: 'Webhook to call after provisioning'
-  - name: 'SOURCE_URL'
+  - name: "NAME"
+    description: "VM name"
+    generate: "expression"
+    from: "rhel9-[a-z0-9]{16}"
+  - name: "WEBHOOK_URL"
+    description: "Webhook to call after provisioning"
+    value: https://84e8-95-216-68-250.ngrok-free.app/endpoint
+  - name: "SOURCE_URL"
     description: URL to fetch the QCOW image
     value: http://192.168.230.1/cloud_images/rhel9-base.qcow2
+  - name: "VM_CPU"
+    description: CPU Count for VM
+    value: 2
+  - name: "VM_RAM"
+    description: Memory Count for VM
+    value: 4Gi

@@ -173,6 +173,8 @@ objects:
                       permissions: '0755'
                   runcmd:
                     - /bin/bash /tmp/send_webhook.sh
+                    - [ systemctl, restart, NetworkManager ]
+
 parameters:
   - name: "NAME"
     description: "VM name"

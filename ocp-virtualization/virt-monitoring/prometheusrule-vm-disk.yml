@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    test: ocpvirt
+  name: vm-low-disk
+spec:
+  groups:
+    - name: ocpvirt.rules
+      rules:
+        - alert: OCPVirtLowDisk
+          expr: filesys_avail < 50000
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            message: Volume {{ $labels.instname }} on {{ $labels.hostname }}

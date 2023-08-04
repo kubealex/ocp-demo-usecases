@@ -169,11 +169,13 @@ objects:
                     - path: /tmp/send_webhook.sh
                       content: |
                         #!/bin/bash
-                        curl -X POST -d '{"source": "ocpvirt", "instanceName": "'$(hostname -f)'"}' ${WEBHOOK_URL}
+                        curl -X POST -d '{"source": "ocpvirt", "instanceName": "'$(hostname -f)'" }' ${WEBHOOK_URL}
                       permissions: '0755'
+                  mounts:
+                    - [ /dev/vdc1, /myfilesystem ]
                   runcmd:
                     - /bin/bash /tmp/send_webhook.sh
-                    - [ systemctl, restart, NetworkManager ]
+                    - systemctl restart NetworkManager
 
 parameters:
   - name: "NAME"

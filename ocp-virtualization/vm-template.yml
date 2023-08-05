@@ -184,7 +184,7 @@ parameters:
     from: "rhel9-[a-z0-9]{16}"
   - name: "WEBHOOK_URL"
     description: "Webhook to call after provisioning"
-    value: https://c835-95-216-68-250.ngrok-free.app
+    value: http://eda.rh-lab.labs:5000/endpoint
   - name: "SOURCE_URL"
     description: URL to fetch the QCOW image
     value: http://192.168.230.1/cloud_images/rhel9-base.qcow2

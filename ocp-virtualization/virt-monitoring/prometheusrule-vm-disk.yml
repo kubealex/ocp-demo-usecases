@@ -13,5 +13,6 @@ spec:
           for: 5m
           labels:
             severity: critical
+            source: ocp
           annotations:
             message: Volume {{ $labels.instname }} on {{ $labels.hostname }}

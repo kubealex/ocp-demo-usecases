@@ -11,7 +11,7 @@ spec:
             stp:
               enabled: false
           port:
-            - name: ens9
+            - name: ens4
         description: Linux bridge with ens9 as a port
         ipv4:
           enabled: false

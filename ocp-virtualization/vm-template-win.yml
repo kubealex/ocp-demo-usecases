@@ -1,0 +1,204 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: windows2k19-server
+  namespace: demo-vm
+  labels:
+    app.kubernetes.io/part-of: hyperconverged-cluster
+    template.kubevirt.io/version: v0.25.0
+    app.kubernetes.io/version: 4.13.3
+    template.kubevirt.io/type: "vm"
+    flavor.template.kubevirt.io/medium: "true"
+    os.template.kubevirt.io/win2k19: "true"
+    template.kubevirt.io/default-os-variant: "true"
+    app.kubernetes.io/name: "custom-templates"
+    workload.template.kubevirt.io/server: "true"
+  annotations:
+    openshift.io/display-name: Microsoft Windows Server 2019 VM
+    openshift.io/documentation-url: "https://github.com/kubevirt/common-templates"
+    operator-sdk/primary-resource-type: SSP.ssp.kubevirt.io
+    defaults.template.kubevirt.io/disk: rootdisk
+    name.os.template.kubevirt.io/win2k19: Microsoft Windows Server 2019
+    template.kubevirt.io/editable: |
+      /objects[0].spec.template.spec.domain.cpu.cores
+      /objects[0].spec.template.spec.domain.resources.requests.memory
+      /objects[0].spec.template.spec.domain.devices.disks
+      /objects[0].spec.template.spec.volumes
+      /objects[0].spec.template.spec.networks
+    template.openshift.io/bindable: "false"
+    operator-sdk/primary-resource: openshift-cnv/ssp-kubevirt-hyperconverged
+    tags: "hidden,kubevirt,virtualmachine,windows"
+    template.kubevirt.io/provider-support-level: Full
+    description: >-
+      Template for Microsoft Windows Server 2019 VM. A PVC with the Windows disk
+      image must be available.
+    openshift.io/support-url: "https://github.com/kubevirt/common-templates/issues"
+    iconClass: icon-windows
+    openshift.io/provider-display-name: ""
+objects:
+  - apiVersion: kubevirt.io/v1
+    kind: VirtualMachine
+    metadata:
+      annotations:
+        vm.kubevirt.io/validations: |
+          [
+            {
+              "name": "minimal-required-memory",
+              "path": "jsonpath::.spec.domain.resources.requests.memory",
+              "rule": "integer",
+              "message": "This VM requires more memory.",
+              "min": 536870912
+            }, {
+              "name": "windows-virtio-bus",
+              "path": "jsonpath::.spec.domain.devices.disks[*].disk.bus",
+              "valid": "jsonpath::.spec.domain.devices.disks[*].disk.bus",
+              "rule": "enum",
+              "message": "virtio disk bus type has better performance, install virtio drivers in VM and change bus type",
+              "values": ["virtio"],
+              "justWarning": true
+            }, {
+              "name": "windows-disk-bus",
+              "path": "jsonpath::.spec.domain.devices.disks[*].disk.bus",
+              "valid": "jsonpath::.spec.domain.devices.disks[*].disk.bus",
+              "rule": "enum",
+              "message": "disk bus has to be either virtio or sata or scsi",
+              "values": ["virtio", "sata", "scsi"]
+            }, {
+              "name": "windows-cd-bus",
+              "path": "jsonpath::.spec.domain.devices.disks[*].cdrom.bus",
+              "valid": "jsonpath::.spec.domain.devices.disks[*].cdrom.bus",
+              "rule": "enum",
+              "message": "cd bus has to be sata",
+              "values": ["sata"]
+            }
+          ]
+      labels:
+        app: "${NAME}"
+        vm.kubevirt.io/template: windows2k19-server
+        vm.kubevirt.io/template.revision: "1"
+        vm.kubevirt.io/template.version: v0.25.0
+      name: "${NAME}"
+    spec:
+      dataVolumeTemplates:
+        - metadata:
+            name: "${NAME}"
+          spec:
+            storage:
+              resources:
+                requests:
+                  storage: "60Gi"
+              storageClassName: "ocs-storagecluster-cephfs"
+            preallocation: false
+            source:
+              http:
+                url: "${SOURCE_URL}"
+        - metadata:
+            name: "${NAME}-additional-disk"
+          spec:
+            storage:
+              resources:
+                requests:
+                  storage: "5Gi"
+              storageClassName: "ocs-storagecluster-cephfs"
+            preallocation: false
+            source:
+              blank: {}
+      running: false
+      template:
+        metadata:
+          annotations:
+            vm.kubevirt.io/flavor: medium
+            vm.kubevirt.io/os: windows2k19
+            vm.kubevirt.io/workload: server
+          labels:
+            kubevirt.io/domain: "${NAME}"
+            kubevirt.io/size: medium
+        spec:
+          domain:
+            clock:
+              timer:
+                hpet:
+                  present: false
+                hyperv: {}
+                pit:
+                  tickPolicy: delay
+                rtc:
+                  tickPolicy: catchup
+              utc: {}
+            cpu:
+              cores: 1
+              sockets: 1
+              threads: 1
+            devices:
+              disks:
+                - name: "rootdisk"
+                  disk:
+                    bus: "virtio"
+                  bootOrder: 1
+                - name: "additional-disk"
+                  disk:
+                    bus: "virtio"
+              interfaces:
+                - masquerade: {}
+                  model: "virtio"
+                  name: "default"
+                - name: "bridged-network"
+                  model: "virtio"
+                  bridge: {}
+            features:
+              acpi: {}
+              apic: {}
+              hyperv:
+                reenlightenment: {}
+                ipi: {}
+                synic: {}
+                synictimer:
+                  direct: {}
+                spinlocks:
+                  spinlocks: 8191
+                reset: {}
+                relaxed: {}
+                vpindex: {}
+                runtime: {}
+                tlbflush: {}
+                frequencies: {}
+                vapic: {}
+            firmware:
+              bootloader:
+                efi: {}
+            machine:
+              type: pc-q35-rhel9.2.0
+            resources:
+              requests:
+                memory: ${VM_RAM}
+          evictionStrategy: LiveMigrate
+          networks:
+            - name: "default"
+              pod: {}
+            - name: "bridged-network"
+              multus:
+                networkName: "demo-vm/br1"
+          volumes:
+            - dataVolume:
+                name: "${NAME}"
+              name: "rootdisk"
+            - name: "additional-disk"
+              dataVolume:
+                name: "${NAME}-additional-disk"
+parameters:
+  - name: "NAME"
+    description: "VM name"
+    generate: "expression"
+    from: "windows-[a-z0-9]{16}"
+  - name: "WEBHOOK_URL"
+    description: "Webhook to call after provisioning"
+    value: http://eda.rh-lab.labs:5000/endpoint
+  - name: "SOURCE_URL"
+    description: URL to fetch the QCOW image
+    value: http://192.168.230.1/cloud_images/win2k19-base.qcow2
+  - name: "VM_CPU"
+    description: CPU Count for VM
+    value: "2"
+  - name: "VM_RAM"
+    description: Memory Count for VM
+    value: "4Gi"

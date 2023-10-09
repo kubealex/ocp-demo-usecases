@@ -9,7 +9,7 @@ spec:
   ports:
     - name: metrics
       protocol: TCP
-      port: 44322
-      targetPort: 44322
+      port: 9100
+      targetPort: 9100
   selector:
     vm.kubevirt.io/name: rhel9-vm

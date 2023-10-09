@@ -9,10 +9,10 @@ spec:
     - name: ocpvirt.rules
       rules:
         - alert: OCPVirtLowDisk
-          expr: filesys_avail < 50000
+          expr: node_filesystem_avail_bytes{endpoint='metrics'} * on(instance) group_left(nodename) node_uname_info  < 50000
           for: 5m
           labels:
             severity: critical
             source: ocp
           annotations:
-            message: Volume {{ $labels.instname }} on {{ $labels.hostname }}
+            message: !unsafe "Filesystem {{ $labels.device }} on {{ $labels.nodename }} is full"

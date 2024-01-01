@@ -5,12 +5,11 @@ metadata:
   namespace: "demo-vm"
   labels:
     app.kubernetes.io/part-of: hyperconverged-cluster
-    flavor.template.kubevirt.io/small: 'true'
+    flavor.template.kubevirt.io/medium: 'true'
     template.kubevirt.io/version: v0.26.0
     app.kubernetes.io/version: 4.14.1
     template.kubevirt.io/type: base
     app.kubernetes.io/component: templating
-    app.kubernetes.io/managed-by: ssp-operator
     os.template.kubevirt.io/rhel9.0: 'true'
     os.template.kubevirt.io/rhel9.1: 'true'
     template.kubevirt.io/default-os-variant: 'true'
@@ -19,40 +18,17 @@ metadata:
     os.template.kubevirt.io/rhel9.3: 'true'
     workload.template.kubevirt.io/server: 'true'
   annotations:
-    template.kubevirt.io/provider: Red Hat
-    template.kubevirt.io/provider-url: 'https://www.redhat.com'
-    template.kubevirt.io/containerdisks: |
-      registry.redhat.io/rhel9/rhel-guest-image
     template.kubevirt.io/version: v1alpha1
-    openshift.io/display-name: Red Hat Enterprise Linux 9 VM
-    openshift.io/documentation-url: 'https://github.com/kubevirt/common-templates'
-    template.kubevirt.io/images: >
-      https://access.redhat.com/downloads/content/479/ver=/rhel---9/9.0/x86_64/product-software
+    openshift.io/display-name: Red Hat Enterprise Linux 9 VM - Custom
     operator-sdk/primary-resource-type: SSP.ssp.kubevirt.io
-    defaults.template.kubevirt.io/disk: rootdisk
-    name.os.template.kubevirt.io/rhel9.0: Red Hat Enterprise Linux 9.0 or higher
-    name.os.template.kubevirt.io/rhel9.1: Red Hat Enterprise Linux 9.0 or higher
-    template.kubevirt.io/editable: |
-      /objects[0].spec.template.spec.domain.cpu.sockets
-      /objects[0].spec.template.spec.domain.cpu.cores
-      /objects[0].spec.template.spec.domain.cpu.threads
-      /objects[0].spec.template.spec.domain.memory.guest
-      /objects[0].spec.template.spec.domain.devices.disks
-      /objects[0].spec.template.spec.volumes
-      /objects[0].spec.template.spec.networks
-    name.os.template.kubevirt.io/rhel9.2: Red Hat Enterprise Linux 9.0 or higher
     template.openshift.io/bindable: 'false'
     openshift.kubevirt.io/pronounceable-suffix-for-name-expression: 'true'
-    operator-sdk/primary-resource: openshift-cnv/ssp-kubevirt-hyperconverged
     name.os.template.kubevirt.io/rhel9.3: Red Hat Enterprise Linux 9.0 or higher
     tags: 'hidden,kubevirt,virtualmachine,linux,rhel'
-    template.kubevirt.io/provider-support-level: Full
     description: >-
       Template for Red Hat Enterprise Linux 9 VM or newer. A PVC with the RHEL
       disk image must be available.
-    openshift.io/support-url: 'https://github.com/kubevirt/common-templates/issues'
     iconClass: icon-rhel
-    openshift.io/provider-display-name: Red Hat
 objects:
   - apiVersion: "kubevirt.io/v1"
     kind: "VirtualMachine"

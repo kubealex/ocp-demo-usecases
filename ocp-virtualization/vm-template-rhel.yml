@@ -5,16 +5,11 @@ metadata:
   namespace: "demo-vm"
   labels:
     app.kubernetes.io/part-of: hyperconverged-cluster
-    flavor.template.kubevirt.io/medium: 'true'
     template.kubevirt.io/version: v0.26.0
     app.kubernetes.io/version: 4.14.1
-    template.kubevirt.io/type: base
+    template.kubevirt.io/type: vm
     app.kubernetes.io/component: templating
-    os.template.kubevirt.io/rhel9.0: 'true'
-    os.template.kubevirt.io/rhel9.1: 'true'
-    template.kubevirt.io/default-os-variant: 'true'
     app.kubernetes.io/name: common-templates
-    os.template.kubevirt.io/rhel9.2: 'true'
     os.template.kubevirt.io/rhel9.3: 'true'
     workload.template.kubevirt.io/server: 'true'
   annotations:
@@ -22,7 +17,6 @@ metadata:
     openshift.io/display-name: Red Hat Enterprise Linux 9 VM - Custom
     operator-sdk/primary-resource-type: SSP.ssp.kubevirt.io
     template.openshift.io/bindable: 'false'
-    openshift.kubevirt.io/pronounceable-suffix-for-name-expression: 'true'
     name.os.template.kubevirt.io/rhel9.3: Red Hat Enterprise Linux 9.0 or higher
     tags: 'hidden,kubevirt,virtualmachine,linux,rhel'
     description: >-
@@ -95,12 +89,12 @@ objects:
                   disk:
                     bus: "virtio"
               interfaces:
-                - masquerade: {}
-                  model: "virtio"
-                  name: "default"
                 - name: "bridged-network"
                   model: "virtio"
                   bridge: {}
+                - masquerade: {}
+                  model: "virtio"
+                  name: "default"
               networkInterfaceMultiqueue: true
               rng: {}
             features:
@@ -116,11 +110,11 @@ objects:
                 memory: ${VM_RAM}
           evictionStrategy: "LiveMigrate"
           networks:
-            - name: "default"
-              pod: {}
             - name: "bridged-network"
               multus:
                 networkName: "demo-vm/br1"
+            - name: "default"
+              pod: {}
           terminationGracePeriodSeconds: 180
           volumes:
             - dataVolume:
